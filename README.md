@@ -1,6 +1,9 @@
 # Adaptive Math Adventure — Prototype v1
 
-A Flutter Web mathematics-learning prototype for children aged 6–8. Level 1
+A Flutter mathematics-learning prototype for children aged 4–8 (Level 1
+content was originally drafted for ages 6–8 and needs review for the younger
+range). The release target is Android; Chrome is the development and quick-test
+environment. Level 1
 contains a 36-question bank and runs five-question sessions using reusable
 Counting, Multiple Choice, and Drag & Drop mechanics. A rule-based assessment
 and session planner adapt later sessions from locally saved evidence. Levels
@@ -9,7 +12,9 @@ and session planner adapt later sessions from locally saved evidence. Levels
 ## Requirements
 
 - Flutter SDK with Dart compatible with `pubspec.yaml` (`^3.12.0`)
-- Chrome for the initial target
+- Chrome for development and quick testing. Android is the release target, but
+  the `android/` platform folder has not been generated yet (see
+  [docs/ebeveyn-modulu/EBEVEYN_MODULU.md](docs/ebeveyn-modulu/EBEVEYN_MODULU.md)).
 
 ## Install and run
 
@@ -17,8 +22,15 @@ From this project directory:
 
 ```powershell
 flutter pub get
-flutter run -d chrome
+flutter run -d chrome --dart-define=FAMILY_DEV_MODE=true
 ```
+
+On first launch the app asks a parent to complete a short setup (privacy
+notice and consent, child nickname and age, parent PIN). The
+`FAMILY_DEV_MODE` flag skips that setup with test data (parent PIN `0000`) and
+only works in debug builds; run without it to see the real first-launch flow.
+Every launch then starts on a role picker: the child goes to the game, the
+parent enters the PIN-protected parent area.
 
 The main flow is **Play → Level 1 → answer five questions → results → start
 another session**. The separate `/demo` route demonstrates the available
@@ -56,6 +68,10 @@ and [docs/TEAM_HANDOVER.md](docs/TEAM_HANDOVER.md).
 - `lib/mechanics/` — activity renderer and reusable gameplay widgets.
 - `lib/presentation/` — visual themes and event-driven mascot.
 - `lib/persistence/`, `lib/progress/` — local repositories and history state.
+- `lib/family/` — first-launch setup, consent, role picker, parent PIN, parent
+  dashboard, and data deletion. Team documentation (Turkish) is in
+  [docs/ebeveyn-modulu/](docs/ebeveyn-modulu/).
+- `CLAUDE.md` — entry instructions for AI coding assistants.
 - `test/` — unit and widget tests.
 - `docs/` — assessment policy, planning policy, architecture, and handover.
 

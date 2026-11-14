@@ -25,14 +25,15 @@
 
 | Area | Status | Notes |
 |---|---|---|
-| App shell/navigation | Implemented | Web/Chrome is the target. |
+| App shell/navigation | Implemented | Android is the release target; Chrome is the development/test environment. The `android/` folder has not been generated yet. |
 | Level 1 content/mechanics | Implemented provisionally | Content is not educator-validated. |
 | Session evidence/persistence | Implemented | Browser-local preferences; not an account or sync system. |
 | Adaptive assessment | Implemented provisionally | Deterministic rules, not machine learning. |
 | Adaptive session planning | Implemented provisionally | Same-level selection; policy needs calibration. |
 | Mascot | Integrated prototype | Built-in Flutter animation; artwork is placeholder. |
 | Levels 2–25 | Not implemented | Locked placeholders only. |
-| Parent accounts/dashboard/cloud | Absent | Explicitly out of scope. |
+| Parent area (local) | Implemented provisionally | First-launch setup, consent, role picker, PIN gate, dashboard, deletion with 30-day trash. See `docs/ebeveyn-modulu/`. Consent text is an unreviewed draft. |
+| Parent accounts/cloud | Absent | No server yet; repositories are behind interfaces for a later backend. |
 | Screen-time enforcement | Absent | Sleeping state/event is only a reserved presentation hook. |
 | Production curriculum/accessibility review | Pending | Required before educational claims or release. |
 
@@ -55,12 +56,14 @@
 
 1. Install Flutter/Dart matching the SDK constraint in `pubspec.yaml`.
 2. From the project root, run `flutter pub get`.
-3. Start Chrome with `flutter run -d chrome`.
+3. Start Chrome with `flutter run -d chrome --dart-define=FAMILY_DEV_MODE=true`
+   (skips the parent setup with test data; debug builds only).
 4. Before submitting a branch, run the four commands in the README's Verify
    section. Keep changes focused and add tests for new behavior.
 5. Create a feature branch; do not commit generated `build/`, `.dart_tool/`,
    secrets, or local credentials. `pubspec.lock` is intentionally tracked.
 
-The app is currently a local prototype with no configured remote. See
+The repository has a GitHub remote (`origin`); do not push or merge another
+member's work without agreement. See
 [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) for module boundaries and the
 branch-based team workflow.
