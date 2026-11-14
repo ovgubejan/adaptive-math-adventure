@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'family/navigation/family_navigation.dart';
 import 'navigation/app_router.dart';
 import 'style/palette.dart';
 
@@ -30,7 +31,7 @@ class AdaptiveMathAdventureApp extends StatelessWidget {
               ),
             ),
           ),
-      routerConfig: createAppRouter(),
+      routerConfig: createAppRouter(family: FamilyNavigation.maybeOf(context)),
     );
   }
 }

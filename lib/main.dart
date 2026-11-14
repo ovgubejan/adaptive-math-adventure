@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'app.dart';
+import 'family/family_module.dart';
 import 'persistence/adaptive_progress_repository.dart';
 import 'persistence/local_adaptive_progress_repository.dart';
 import 'persistence/local_session_result_persistence.dart';
@@ -12,6 +13,8 @@ void main() {
   WidgetsFlutterBinding.ensureInitialized();
   final persistence = LocalSessionResultPersistence();
   final adaptiveProgress = LocalAdaptiveProgressRepository();
+  // Ebeveyn modülü (kurulum, rıza, PIN, ebeveyn paneli): lib/family/
+  final family = FamilyModule.local()..start();
   runApp(
     MultiProvider(
       providers: [
@@ -21,6 +24,7 @@ void main() {
           create: (_) =>
               SessionHistoryController(persistence, adaptiveProgress)..load(),
         ),
+        ...family.providers,
       ],
       child: const AdaptiveMathAdventureApp(),
     ),

@@ -2,15 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '../content/level_catalog.dart';
+import '../family/navigation/family_navigation.dart';
 import '../screens/level_selection_screen.dart';
 import '../screens/main_menu_screen.dart';
 import '../screens/play_session_screen.dart';
 import '../screens/session_results_screen.dart';
 
-GoRouter createAppRouter({String? initialLocation}) => GoRouter(
-  initialLocation: initialLocation ?? '/',
+/// [family] verilirse ebeveyn modülü devreye girer: ilk açılış kurulumu, rol
+/// seçimi ve ebeveyn bölümü rotaları eklenir, her rota erişim kuralına göre
+/// korunur. Verilmezse yönlendirici eskisi gibi çalışır.
+///
+/// YENİ ROTA EKLERKEN: rotanın desenini `FamilyRoutes.access` içine de
+/// ekleyin (lib/family/navigation/family_navigation.dart).
+GoRouter createAppRouter({
+  String? initialLocation,
+  FamilyNavigation? family,
+}) => GoRouter(
+  initialLocation: initialLocation ?? family?.initialLocation ?? '/',
+  refreshListenable: family?.refreshListenable,
+  redirect: family?.redirect,
   routes: [
-    GoRoute(path: '/', builder: (context, state) => const MainMenuScreen()),
+    GoRoute(
+      path: '/',
+      builder: (context, state) =>
+          family?.wrapChildHome(const MainMenuScreen()) ??
+          const MainMenuScreen(),
+    ),
     GoRoute(
       path: '/levels',
       builder: (context, state) => LevelSelectionScreen(
@@ -41,6 +58,7 @@ GoRouter createAppRouter({String? initialLocation}) => GoRouter(
       path: '/results',
       builder: (context, state) => const SessionResultsScreen(),
     ),
+    ...?family?.routes,
   ],
   errorBuilder: (context, state) =>
       LevelSelectionScreen(showUnavailableMessage: true),
