@@ -14,16 +14,21 @@ class PinTextField extends StatelessWidget {
   final String? errorText;
   final bool autofocus;
 
+  /// İçteki metin alanının anahtarı (alanı görünür yapmak için).
+  final Key? fieldKey;
+
   const PinTextField({
     required this.controller,
     required this.label,
     this.errorText,
     this.autofocus = false,
+    this.fieldKey,
     super.key,
   });
 
   @override
   Widget build(BuildContext context) => TextField(
+    key: fieldKey,
     controller: controller,
     autofocus: autofocus,
     obscureText: true,
@@ -101,6 +106,7 @@ class _DestructiveConfirmationDialog extends StatefulWidget {
 class _DestructiveConfirmationDialogState
     extends State<_DestructiveConfirmationDialog> {
   final _pinController = TextEditingController();
+  final _pinFieldKey = GlobalKey();
   late bool _option = widget.optionInitialValue;
   String? _pinError;
   bool _checking = false;
@@ -111,9 +117,35 @@ class _DestructiveConfirmationDialogState
     super.dispose();
   }
 
+  /// Küçük ekranlarda PIN alanı pencerenin altında kalabilir; hata
+  /// gösterildiğinde alan görünür hâle getirilir.
+  void _showPinError(String? message) {
+    setState(() {
+      _checking = false;
+      _pinError = message;
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final fieldContext = _pinFieldKey.currentContext;
+      if (fieldContext != null && fieldContext.mounted) {
+        Scrollable.ensureVisible(
+          fieldContext,
+          duration: const Duration(milliseconds: 200),
+          alignment: 0.5,
+        );
+      }
+    });
+  }
+
   Future<void> _confirm() async {
     final controller = context.read<FamilyController>();
     final navigator = Navigator.of(context);
+    // Eksik PIN bir deneme hakkı harcamaz.
+    if (_pinController.text.length < FamilyConfig.pinLength) {
+      _showPinError(
+        'Onaylamak için ${FamilyConfig.pinLength} haneli PIN kodunuzu girin.',
+      );
+      return;
+    }
     setState(() {
       _checking = true;
       _pinError = null;
@@ -123,10 +155,7 @@ class _DestructiveConfirmationDialogState
       result = await controller.checkPin(_pinController.text);
     } catch (error) {
       if (!mounted) return;
-      setState(() {
-        _checking = false;
-        _pinError = 'PIN kontrol edilemedi: $error';
-      });
+      _showPinError('PIN kontrol edilemedi: $error');
       return;
     }
     if (!mounted) return;
@@ -134,11 +163,8 @@ class _DestructiveConfirmationDialogState
       navigator.pop(DestructiveConfirmationResult(optionValue: _option));
       return;
     }
-    setState(() {
-      _checking = false;
-      _pinController.clear();
-      _pinError = pinResultMessage(result, controller.now);
-    });
+    _pinController.clear();
+    _showPinError(pinResultMessage(result, controller.now));
   }
 
   Widget _bullets(List<String> items) => Column(
@@ -165,6 +191,8 @@ class _DestructiveConfirmationDialogState
       ...?widget.consequencesFor?.call(_option),
     ];
     return AlertDialog(
+      // Küçük telefonlarda içeriğe daha fazla yer kalsın.
+      insetPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
       title: Text(widget.title),
       content: SizedBox(
         width: 420,
@@ -202,6 +230,7 @@ class _DestructiveConfirmationDialogState
               const SizedBox(height: 12),
               PinTextField(
                 key: const ValueKey('confirm-pin'),
+                fieldKey: _pinFieldKey,
                 controller: _pinController,
                 label: 'Onaylamak için PIN\'inizi girin',
                 errorText: _pinError,

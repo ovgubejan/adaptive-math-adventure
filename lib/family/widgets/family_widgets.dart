@@ -95,9 +95,12 @@ class FamilyPage extends StatelessWidget {
               child: Center(
                 child: ConstrainedBox(
                   constraints: BoxConstraints(maxWidth: maxWidth),
-                  child: ListView(
+                  child: SingleChildScrollView(
                     padding: const EdgeInsets.all(20),
-                    children: children,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: children,
+                    ),
                   ),
                 ),
               ),
@@ -150,7 +153,7 @@ class PinPad extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final palette = Palette();
-    Widget key(String label, {VoidCallback? onTap, Key? widgetKey}) => Padding(
+    Widget key(Widget label, {VoidCallback? onTap, Key? widgetKey}) => Padding(
       padding: const EdgeInsets.all(6),
       child: SizedBox(
         width: 68,
@@ -162,12 +165,12 @@ class PinPad extends StatelessWidget {
             backgroundColor: palette.trueWhite,
             padding: EdgeInsets.zero,
           ),
-          child: Text(label, style: const TextStyle(fontSize: 22)),
+          child: label,
         ),
       ),
     );
     Widget digit(String value) => key(
-      value,
+      Text(value, style: const TextStyle(fontSize: 22)),
       onTap: () => _add(value),
       widgetKey: ValueKey('pin-key-$value'),
     );
@@ -215,7 +218,7 @@ class PinPad extends StatelessWidget {
               const SizedBox(width: 80),
               digit('0'),
               key(
-                '⌫',
+                const Icon(Icons.backspace_outlined, semanticLabel: 'Sil'),
                 onTap: _removeLast,
                 widgetKey: const ValueKey('pin-key-backspace'),
               ),

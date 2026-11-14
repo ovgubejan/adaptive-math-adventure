@@ -53,6 +53,12 @@ class ParentDashboardScreen extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: palette.backgroundSettings,
           automaticallyImplyLeading: false,
+          leading: IconButton(
+            key: const ValueKey('parent-exit'),
+            tooltip: 'Çıkış (ebeveyn bölümünü kilitle)',
+            icon: const Icon(Icons.logout),
+            onPressed: () => context.go(FamilyRoutes.rolePicker),
+          ),
           title: Text('${nickname ?? 'Çocuğunuz'} — gidişat'),
           actions: [
             IconButton(
@@ -61,12 +67,8 @@ class ParentDashboardScreen extends StatelessWidget {
               icon: const Icon(Icons.settings),
               onPressed: () => context.go(FamilyRoutes.parentSettings),
             ),
-            IconButton(
-              key: const ValueKey('parent-exit'),
-              tooltip: 'Çıkış (ebeveyn bölümünü kilitle)',
-              icon: const Icon(Icons.logout),
-              onPressed: () => context.go(FamilyRoutes.rolePicker),
-            ),
+            // Sağ üst köşe debug derlemede "DEBUG" şeridinin altında kalır.
+            const SizedBox(width: 28),
           ],
           bottom: const TabBar(
             isScrollable: true,

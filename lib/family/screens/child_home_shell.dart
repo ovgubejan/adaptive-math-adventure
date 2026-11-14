@@ -31,33 +31,22 @@ class ChildHomeShell extends StatelessWidget {
                 top: 0,
                 left: 0,
                 right: 0,
-                child: SafeArea(
-                  bottom: false,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 4,
-                    ),
-                    child: Row(
-                      children: [
-                        if (nickname != null)
-                          Expanded(
-                            child: Text(
-                              'Merhaba, $nickname!',
-                              key: const ValueKey('family-child-greeting'),
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: palette.inkFullOpacity,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          )
-                        else
-                          const Spacer(),
-                        Material(
-                          color: Colors.transparent,
-                          child: IconButton(
+                // Sarılan ekranın Scaffold'ı bu satırın altında kaldığı için
+                // yazı ve düğme kendi Material katmanına ihtiyaç duyar.
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: SafeArea(
+                    bottom: false,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 4,
+                        vertical: 4,
+                      ),
+                      child: Row(
+                        children: [
+                          // Düğme solda: sağ üst köşe debug derlemede
+                          // "DEBUG" şeridinin altında kalıyor.
+                          IconButton(
                             key: const ValueKey('family-switch-role'),
                             tooltip: 'Kullanıcı değiştir',
                             icon: Icon(
@@ -67,8 +56,21 @@ class ChildHomeShell extends StatelessWidget {
                             onPressed: () =>
                                 context.go(FamilyRoutes.rolePicker),
                           ),
-                        ),
-                      ],
+                          if (nickname != null)
+                            Expanded(
+                              child: Text(
+                                'Merhaba, $nickname!',
+                                key: const ValueKey('family-child-greeting'),
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: palette.inkFullOpacity,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

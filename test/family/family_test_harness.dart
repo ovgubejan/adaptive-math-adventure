@@ -71,6 +71,9 @@ Future<void> goTo(WidgetTester tester, String location) async {
 /// Uygulamayı gerçek yerel depolarla (sahte shared_preferences üzerinde) ve
 /// ebeveyn modülüyle birlikte çalıştırır.
 ///
+/// [surfaceSize] ekranın mantıksal boyutudur; küçük telefon denemek için
+/// örneğin `Size(360, 640)` verin.
+///
 /// Çağırmadan önce `SharedPreferences.setMockInitialValues({})` ile depoyu
 /// sıfırlayın. Aynı [secureStore] ile yeniden çağırmak "uygulama kapatılıp
 /// açıldı" durumunu canlandırır.
@@ -80,9 +83,11 @@ Future<FamilyModule> pumpFamilyApp(
   KeyValueStore? secureStore,
   DateTime Function()? clock,
   bool devMode = false,
+  Size surfaceSize = const Size(900, 2000),
+  double devicePixelRatio = 1,
 }) async {
-  tester.view.physicalSize = const Size(900, 2000);
-  tester.view.devicePixelRatio = 1;
+  tester.view.physicalSize = surfaceSize * devicePixelRatio;
+  tester.view.devicePixelRatio = devicePixelRatio;
   addTearDown(tester.view.reset);
 
   final module = FamilyModule.local(

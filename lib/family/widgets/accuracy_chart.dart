@@ -41,7 +41,9 @@ class AccuracyChart extends StatelessWidget {
                 values: [for (final point in points) point.accuracyPercent],
                 lineColor: palette.darkPen,
                 gridColor: palette.ink.withValues(alpha: 0.2),
-                labelColor: palette.inkFullOpacity,
+                labelStyle:
+                    (Theme.of(context).textTheme.bodySmall ?? const TextStyle())
+                        .copyWith(color: palette.inkFullOpacity, fontSize: 11),
               ),
             ),
           ),
@@ -69,13 +71,13 @@ class _AccuracyChartPainter extends CustomPainter {
   final List<double> values;
   final Color lineColor;
   final Color gridColor;
-  final Color labelColor;
+  final TextStyle labelStyle;
 
   _AccuracyChartPainter({
     required this.values,
     required this.lineColor,
     required this.gridColor,
-    required this.labelColor,
+    required this.labelStyle,
   });
 
   static const double _leftPadding = 44;
@@ -101,10 +103,7 @@ class _AccuracyChartPainter extends CustomPainter {
       final y = yFor(percent);
       canvas.drawLine(Offset(chartLeft, y), Offset(chartRight, y), gridPaint);
       final label = TextPainter(
-        text: TextSpan(
-          text: '%${percent.round()}',
-          style: TextStyle(color: labelColor, fontSize: 11),
-        ),
+        text: TextSpan(text: '%${percent.round()}', style: labelStyle),
         textDirection: TextDirection.ltr,
       )..layout();
       label.paint(

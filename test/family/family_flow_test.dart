@@ -384,6 +384,24 @@ void main() {
       },
     );
 
+    testWidgets('PIN yazmadan onaylamak deneme hakkı harcamaz', (tester) async {
+      await _seedSession('s1', DateTime(2026, 11, 10), 3);
+      final module = await pumpFamilyApp(tester);
+      await _openDataManagement(tester);
+
+      await tapKey(tester, 'data-reset-progress');
+      for (var press = 0; press < FamilyConfig.maxPinAttempts + 2; press++) {
+        await tapKey(tester, 'confirm-accept');
+      }
+      expect(find.textContaining('haneli PIN'), findsOneWidget);
+      expect(await LocalSessionResultPersistence().loadResults(), hasLength(1));
+
+      // Kilit oluşmadı: doğru PIN hemen kabul edilir.
+      await _confirmWithPin(tester);
+      expect(await LocalSessionResultPersistence().loadResults(), isEmpty);
+      expect(module.controller.trashEntries, hasLength(1));
+    });
+
     testWidgets('yanlış PIN ile silme yapılamaz', (tester) async {
       await _seedSession('s1', DateTime(2026, 11, 10), 3);
       await pumpFamilyApp(tester);

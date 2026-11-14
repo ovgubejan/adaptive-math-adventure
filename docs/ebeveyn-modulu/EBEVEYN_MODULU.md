@@ -88,7 +88,16 @@ test/family/
   route_access_test.dart      Her rota sınıflandırılmış mı + yönlendirme kuralları
   family_controller_test.dart Kurulum, PIN kilidi, silme, Silinenler, geliştirici modu
   family_flow_test.dart       Uygulamayı baştan sona gezen arayüz testleri
+  small_screen_test.dart      Küçük telefon ekranında (360x640) taşma olmadığı
   ...
+```
+
+Ekranların görüntüsünü almak için (yazılar gerçek yazı tipiyle, düğme
+yazıları test ortamı yüzünden kutu olarak görünür):
+
+```powershell
+flutter test test/family/small_screen_test.dart --update-goldens `
+  --dart-define=FAMILY_SCREENSHOT_DIR=C:/gecici/ekranlar
 ```
 
 ## Mevcut dosyalara dokunduğumuz yerler
