@@ -18,6 +18,9 @@ and session planner adapt later sessions from locally saved evidence. Levels
 
 ## Install and run
 
+New to Flutter? Turkish step-by-step setup guide:
+[docs/ebeveyn-modulu/KURULUM.md](docs/ebeveyn-modulu/KURULUM.md).
+
 From this project directory:
 
 ```powershell

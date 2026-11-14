@@ -103,6 +103,7 @@ nedenini düzelt.
 
 | Yapacağın iş | Önce oku |
 |---|---|
+| Flutter kurulu değil / ilk kurulum | `docs/ebeveyn-modulu/KURULUM.md` |
 | Seviye, soru, oyun, ekran eklemek | `docs/ebeveyn-modulu/OYUN_EKIBI_KILAVUZU.md`, `docs/INTEGRATION_GUIDE.md` |
 | Sunucu, hesap, eşitleme eklemek | `docs/ebeveyn-modulu/SUNUCU_EKIBI_KILAVUZU.md` |
 | Ebeveyn modülünde değişiklik | `docs/ebeveyn-modulu/EBEVEYN_MODULU.md`, `docs/ebeveyn-modulu/KARARLAR.md` |
